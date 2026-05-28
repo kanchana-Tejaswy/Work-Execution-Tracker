@@ -9,9 +9,10 @@ import { cn } from '@/lib/utils'
 interface SubmitUpdateModalProps {
   projectId: string
   projectTitle: string
+  trigger?: React.ReactNode
 }
 
-export function SubmitUpdateModal({ projectId, projectTitle }: SubmitUpdateModalProps) {
+export function SubmitUpdateModal({ projectId, projectTitle, trigger }: SubmitUpdateModalProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -47,13 +48,19 @@ export function SubmitUpdateModal({ projectId, projectTitle }: SubmitUpdateModal
 
   return (
     <>
-      <button 
-        onClick={() => setIsOpen(true)}
-        className="text-text-muted hover:text-primary-accent hover:bg-primary-accent/5 p-2 rounded-lg transition-all"
-        title="Submit Update"
-      >
-        <Send size={16} />
-      </button>
+      {trigger ? (
+        <div onClick={() => setIsOpen(true)} className="cursor-pointer">
+          {trigger}
+        </div>
+      ) : (
+        <button 
+          onClick={() => setIsOpen(true)}
+          className="text-text-muted hover:text-primary-accent hover:bg-primary-accent/5 p-2 rounded-lg transition-all"
+          title="Submit Update"
+        >
+          <Send size={16} />
+        </button>
+      )}
 
       <AnimatePresence>
         {isOpen && (
