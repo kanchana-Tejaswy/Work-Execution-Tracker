@@ -105,6 +105,24 @@ function TimelineEntry({ activity }: { activity: any }) {
               <p className="text-sm text-text-primary font-medium leading-relaxed italic border-l-2 border-primary-accent/20 pl-4">
                 &quot;{activity.update_text}&quot;
               </p>
+              
+              {activity.attachment_url && (
+                <a 
+                  href={activity.attachment_url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 p-3 bg-surface/50 border border-surface-border rounded-xl hover:border-primary-accent/30 hover:bg-primary-accent/5 transition-all group w-fit"
+                >
+                  <div className="p-2 bg-background-white rounded-lg shadow-sm group-hover:text-primary-accent transition-colors">
+                    <FileUp size={14} />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs font-bold text-text-primary group-hover:text-primary-accent transition-colors">Execution Evidence Attached</span>
+                    <span className="text-[9px] font-black text-text-muted uppercase tracking-widest">Click to verify</span>
+                  </div>
+                </a>
+              )}
+
               {activity.progress_percentage !== null && (
                 <div className="flex items-center gap-4">
                   <div className="flex-1 h-1.5 bg-surface-border rounded-full overflow-hidden">
