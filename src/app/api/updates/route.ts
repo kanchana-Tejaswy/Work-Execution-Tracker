@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 import { submitUpdate, getProjectUpdates } from '@/services/projects/update.service'
+import { getProjectById } from '@/services/projects/project.service'
+import { createNotification } from '@/services/notifications/notification.service'
 import { AIService } from '@/services/ai.service'
 
 export async function POST(request: Request) {
@@ -7,8 +9,22 @@ export async function POST(request: Request) {
     const body = await request.json()
     const update = await submitUpdate(body)
     
-    // Trigger AI analysis in the background (or wait for it if you want real-time feedback)
-    // For this MVP, we wait to ensure the dashboard reflects the latest AI insight immediately
+    // Fetch project details to know who to notify
+    const project = await getProjectById(body.projectId);
+    
+    if (project && project.created_by && project.created_by !== update.user_id) {
+      // Notify the project creator that a signal was submitted
+      const hasAttachment = !!body.attachmentUrl;
+      await createNotification({
+        userId: project.created_by,
+        projectId: body.projectId,
+        title: 'New Execution Signal Logged',
+        message: `An update was submitted for ${project.title}. ${hasAttachment ? 'Evidence attached.' : 'No supporting evidence provided.'}`,
+        type: hasAttachment ? 'info' : 'attention' // Flag as attention needed if no evidence
+      });
+    }
+    
+    // Trigger AI analysis in the background
     await AIService.processProjectUpdates(body.projectId)
     
     return NextResponse.json(update, { status: 201 })

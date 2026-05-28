@@ -1,6 +1,7 @@
 import { Bell, Search, UserCircle, LogOut, Menu, Moon, Sun } from "lucide-react";
 import { logout } from "@/services/auth/auth.service";
 import { useState, useEffect } from "react";
+import { NotificationCenter } from "./NotificationCenter";
 
 interface TopNavProps {
   onMenuClick?: () => void;
@@ -60,13 +61,7 @@ export function TopNav({ onMenuClick, user }: TopNavProps) {
           {isDark ? <Sun size={20} /> : <Moon size={20} />}
         </button>
 
-        <button 
-          className="h-11 w-11 flex items-center justify-center text-text-secondary hover:text-primary-accent transition-all relative bg-surface rounded-xl group"
-          aria-label="View notifications"
-        >
-          <Bell size={20} className="group-hover:rotate-12 transition-transform" />
-          <span className="absolute top-3 right-3 w-2 h-2 bg-primary-warm rounded-full border-2 border-background-white"></span>
-        </button>
+        <NotificationCenter />
 
         <div className="flex items-center gap-4 pl-4 border-l border-surface-border h-11">
           <div className="text-right hidden sm:flex flex-col justify-center">
