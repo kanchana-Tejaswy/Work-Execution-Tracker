@@ -2,6 +2,7 @@ import { Bell, Search, UserCircle, LogOut, Menu, Moon, Sun } from "lucide-react"
 import { logout } from "@/services/auth/auth.service";
 import { useState, useEffect } from "react";
 import { NotificationCenter } from "./NotificationCenter";
+import { GlobalSearch } from "./GlobalSearch";
 
 interface TopNavProps {
   onMenuClick?: () => void;
@@ -41,15 +42,7 @@ export function TopNav({ onMenuClick, user }: TopNavProps) {
           <Menu size={20} />
         </button>
         
-        <div className="relative w-full max-w-md hidden lg:block h-11">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" size={16} />
-          <input 
-            type="text" 
-            placeholder="Search operational data..." 
-            aria-label="Search resources"
-            className="input-field w-full h-full pl-11 !bg-surface/50 border-0 focus:!bg-background-white transition-all"
-          />
-        </div>
+        <GlobalSearch />
       </div>
       
       <div className="flex items-center gap-4 sm:gap-6 h-11">
