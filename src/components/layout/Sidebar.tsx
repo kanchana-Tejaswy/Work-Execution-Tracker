@@ -26,10 +26,9 @@ const menuItems = [
 interface SidebarProps {
   isOpen?: boolean;
   onClose?: () => void;
-  isDemo?: boolean;
 }
 
-export function Sidebar({ isOpen, onClose, isDemo }: SidebarProps) {
+export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
 
   return (
@@ -54,9 +53,6 @@ export function Sidebar({ isOpen, onClose, isDemo }: SidebarProps) {
               </div>
               <span className="font-black text-2xl tracking-tighter text-text-primary">WET<span className="text-primary-accent">.</span></span>
             </div>
-            {isDemo && (
-              <span className="demo-badge w-fit">Guest Access</span>
-            )}
           </div>
           <button 
             onClick={onClose}

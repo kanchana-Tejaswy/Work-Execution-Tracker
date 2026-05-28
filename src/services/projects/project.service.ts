@@ -1,7 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
 import { logActivity } from '../activity/activity.service'
-import { cookies } from 'next/headers'
-import { DEMO_PROJECTS } from '../demo/demo.data'
 
 export type ProjectStatus = 'active' | 'completed' | 'delayed' | 'at_risk'
 
@@ -13,11 +11,6 @@ export interface CreateProjectData {
 }
 
 export async function createProject(data: CreateProjectData) {
-  const isDemo = cookies().get('wet_demo')?.value === 'true'
-  if (isDemo) {
-    return { id: 'demo-new-project', ...data, status: 'active', created_at: new Date().toISOString() }
-  }
-
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -47,9 +40,6 @@ export async function createProject(data: CreateProjectData) {
 }
 
 export async function getProjects() {
-  const isDemo = cookies().get('wet_demo')?.value === 'true'
-  if (isDemo) return DEMO_PROJECTS
-
   const supabase = createClient()
   
   // RLS will handle filtering projects the user is a member of
@@ -84,21 +74,6 @@ export async function getProjects() {
 }
 
 export async function getProjectById(projectId: string) {
-  const isDemo = cookies().get('wet_demo')?.value === 'true'
-  if (isDemo) {
-    const demoProject = DEMO_PROJECTS.find(p => p.id === projectId)
-    if (demoProject) {
-      // Return mock structure that matches Supabase output roughly
-      return {
-        ...demoProject,
-        project_members: demoProject.project_members.map((m, i) => ({ users: { full_name: `Demo User ${i+1}`, email: 'demo@wet.enterprise' } })),
-        project_updates: [],
-        ai_reports: [{ metadata: demoProject.ai_intelligence }]
-      }
-    }
-    return null
-  }
-
   const supabase = createClient()
 
   const { data, error } = await supabase
@@ -112,7 +87,16 @@ export async function getProjectById(projectId: string) {
     return null
   }
 
-  return data
+  // Calculate latest progress
+  const updates = data.project_updates || []
+  const latestUpdate = updates.sort((a: any, b: any) => 
+    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  )[0]
+
+  return {
+    ...data,
+    progress: latestUpdate?.progress_percentage || 0
+  }
 }
 
 export async function addProjectMember(projectId: string, userId: string, role: string = 'member') {

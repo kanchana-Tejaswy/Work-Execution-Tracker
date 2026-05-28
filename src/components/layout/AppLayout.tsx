@@ -14,7 +14,6 @@ interface AppLayoutProps {
 export function AppLayout({ children, user }: AppLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const pathname = usePathname();
-  const isDemo = user?.profile?.is_demo;
   
   // Don't show app layout on landing page, login, or register
   const isAppPage = pathname !== "/" && !pathname.startsWith('/login') && !pathname.startsWith('/register');
@@ -25,24 +24,17 @@ export function AppLayout({ children, user }: AppLayoutProps) {
 
   return (
     <div className="flex min-h-screen bg-background-main">
-      {isDemo && (
-        <div className="fixed top-0 left-0 right-0 bg-primary-accent text-white text-[10px] font-bold py-1 text-center z-[100] uppercase tracking-[0.2em] shadow-lg">
-          Viewing Demo Mode • Read-Only Environment
-        </div>
-      )}
-      <Sidebar 
-        isOpen={isSidebarOpen} 
-        onClose={() => setIsSidebarOpen(false)} 
-        isDemo={isDemo}
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
-      
+
       <div className={cn(
         "flex-1 flex flex-col transition-all duration-300",
-        "lg:pl-[240px]",
-        isDemo && "pt-6"
+        "lg:pl-[240px]"
       )}>
-        <TopNav 
-          onMenuClick={() => setIsSidebarOpen(true)} 
+        <TopNav
+          onMenuClick={() => setIsSidebarOpen(true)}
           user={user}
         />
         <main className="flex-1 p-5 sm:p-8 lg:p-10">

@@ -52,7 +52,7 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
             <p className="text-text-secondary text-sm font-medium leading-relaxed max-w-2xl">{project.description}</p>
           </div>
           <div className="flex items-center gap-3 shrink-0">
-            <RiskIndicatorBadge level={uiLevelMap[project.status] || 'GREEN'} />
+            <RiskIndicatorBadge level={(project.status && uiLevelMap[project.status]) || 'GREEN'} />
             <SubmitUpdateModal projectId={project.id} projectTitle={project.title} />
           </div>
         </div>
@@ -83,7 +83,7 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
             <div className="flex flex-col gap-1">
               <span className="text-[9px] font-black text-text-muted uppercase tracking-widest">Created</span>
               <span className="text-sm font-bold text-text-secondary mt-1">
-                {new Date(project.created_at).toLocaleDateString()}
+                {project.created_at ? new Date(project.created_at).toLocaleDateString() : 'N/A'}
               </span>
             </div>
             <div className="col-span-full pt-2">

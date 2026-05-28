@@ -1,20 +1,14 @@
 import { BrainCircuit, TrendingUp, AlertCircle, Sparkles, Target, Zap, Info } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { cookies } from "next/headers";
-import { DEMO_REPORTS } from "@/services/demo/demo.data";
 import { cn } from "@/lib/utils";
 
 export async function AISummaryPanel() {
-  const isDemo = cookies().get('wet_demo')?.value === 'true';
-  
   const supabase = createClient();
-  const { data: reports, error } = isDemo 
-    ? { data: DEMO_REPORTS, error: null }
-    : await supabase
-      .from('ai_reports')
-      .select('*, projects(title)')
-      .order('created_at', { ascending: false })
-      .limit(5);
+  const { data: reports, error } = await supabase
+    .from('ai_reports')
+    .select('*, projects(title)')
+    .order('created_at', { ascending: false })
+    .limit(5);
 
   const latestReport = reports?.[0];
   const metadata = (latestReport?.metadata as any) || {};

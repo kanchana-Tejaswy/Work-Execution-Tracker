@@ -1,23 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
-import { cookies } from 'next/headers'
 
 export async function getCurrentUser() {
-  const isDemo = cookies().get('wet_demo')?.value === 'true'
-  
-  if (isDemo) {
-    return {
-      id: 'demo-user-id',
-      email: 'demo@wet.enterprise',
-      profile: {
-        id: 'demo-user-id',
-        full_name: 'Guest User',
-        role: 'manager',
-        avatar_url: null,
-        is_demo: true
-      }
-    }
-  }
-
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   
@@ -30,8 +13,8 @@ export async function getCurrentUser() {
     .single()
 
   if (error) {
-    console.error('Error fetching current user profile:', error)
-    return null
+    // Return user with null profile if record doesn't exist yet
+    return { ...user, profile: null }
   }
 
   return { ...user, profile }

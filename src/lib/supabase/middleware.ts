@@ -56,12 +56,10 @@ export async function updateSession(request: NextRequest) {
   )
 
   const { data: { user } } = await supabase.auth.getUser()
-  const isDemo = request.cookies.get('wet_demo')?.value === 'true'
 
   // PROTECTED ROUTES LOGIC
   if (
     !user &&
-    !isDemo &&
     !request.nextUrl.pathname.startsWith('/login') &&
     !request.nextUrl.pathname.startsWith('/auth') &&
     request.nextUrl.pathname !== '/'

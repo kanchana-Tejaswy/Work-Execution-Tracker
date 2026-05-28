@@ -1,20 +1,14 @@
 import { GitCommit, FileUp, MessageSquare, CheckCircle2, User, Play, History, Activity as ActivityIcon } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { cookies } from "next/headers";
-import { DEMO_ACTIVITIES } from "@/services/demo/demo.data";
 import { cn } from "@/lib/utils";
 
 export async function ActivityTimeline() {
-  const isDemo = cookies().get('wet_demo')?.value === 'true';
-  
   const supabase = createClient();
-  const { data: activities, error } = isDemo 
-    ? { data: DEMO_ACTIVITIES, error: null }
-    : await supabase
-      .from('activity_logs')
-      .select('*, users(full_name), projects(title)')
-      .order('created_at', { ascending: false })
-      .limit(15);
+  const { data: activities, error } = await supabase
+    .from('activity_logs')
+    .select('*, users(full_name), projects(title)')
+    .order('created_at', { ascending: false })
+    .limit(15);
 
   const getIcon = (type: string) => {
     switch (type) {

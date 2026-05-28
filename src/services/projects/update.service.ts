@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
 import { logActivity } from '../activity/activity.service'
-import { cookies } from 'next/headers'
 
 export interface SubmitUpdateData {
   projectId: string
@@ -10,11 +9,6 @@ export interface SubmitUpdateData {
 }
 
 export async function submitUpdate(data: SubmitUpdateData) {
-  const isDemo = cookies().get('wet_demo')?.value === 'true'
-  if (isDemo) {
-    return { id: 'demo-new-update', ...data, created_at: new Date().toISOString() }
-  }
-
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 

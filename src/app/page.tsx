@@ -14,7 +14,6 @@ import {
   Zap,
   MessageSquare
 } from "lucide-react";
-import { continueAsGuest } from "@/services/auth/auth.service";
 
 export default function Home() {
   return (
@@ -29,11 +28,6 @@ export default function Home() {
         </div>
         <div className="flex items-center gap-8">
           <Link href="/login" className="text-xs font-black uppercase tracking-[0.2em] text-text-secondary hover:text-primary-accent transition-colors">Audit Login</Link>
-          <form action={continueAsGuest}>
-            <button className="btn-accent px-6 py-2 text-[10px] uppercase tracking-widest font-black">
-              Enter Demo
-            </button>
-          </form>
         </div>
       </nav>
 
@@ -60,11 +54,6 @@ export default function Home() {
               Initiate Workspace
               <ArrowRight size={20} />
             </Link>
-            <form action={continueAsGuest} className="w-full sm:w-auto">
-              <button className="btn-outline px-12 py-5 text-base w-full bg-white/40 shadow-paper border-white/60">
-                Explore The Workspace
-              </button>
-            </form>
           </div>
         </div>
         
@@ -229,11 +218,6 @@ export default function Home() {
                 <Link href="/register" className="btn-accent px-12 py-4 text-base">
                   Create Workspace
                 </Link>
-                <form action={continueAsGuest}>
-                  <button className="btn-outline px-12 py-4 text-base bg-background-white">
-                    Explore Demo Dashboard
-                  </button>
-                </form>
               </div>
             </div>
             <Activity className="absolute -bottom-10 -right-10 text-primary-accent opacity-5 w-64 h-64 group-hover:rotate-12 transition-transform duration-1000" />
